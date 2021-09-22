@@ -47,28 +47,24 @@ AFRAME.registerComponent("markerhandler", {
         buttons: false
       });
     } else {
-      // Changing Model scale to initial scale
+
       var model = document.querySelector(`#model-${toy.id}`);
       model.setAttribute("position", toy.model_geometry.position);
       model.setAttribute("rotation", toy.model_geometry.rotation);
       model.setAttribute("scale", toy.model_geometry.scale);
 
-      // make model visible
       var model = document.querySelector(`#model-${toy.id}`);
       model.setAttribute("visible", true);
 
-      // make mian plane Container visible
       var mainPlane = document.querySelector(`#main-plane-${toy.id}`);
       mainPlane.setAttribute("visible", true);
 
-      // Changing button div visibility
       var buttonDiv = document.getElementById("button-div");
       buttonDiv.style.display = "flex";
 
       var orderButtton = document.getElementById("order-button");
       var orderSummaryButtton = document.getElementById("order-summary-button");
 
-      // Handling Click Events
       orderButtton.addEventListener("click", () => {
         uid = uid.toUpperCase();
         this.handleOrder(uid, toy);
@@ -92,7 +88,7 @@ AFRAME.registerComponent("markerhandler", {
     }
   },
   handleOrder: function(uid, toy) {
-    // Reading current UID order details
+
     firebase
       .firestore()
       .collection("users")
@@ -102,10 +98,9 @@ AFRAME.registerComponent("markerhandler", {
         var details = doc.data();
 
         if (details["current_orders"][toy.id]) {
-          // Increasing Current Quantity
+
           details["current_orders"][toy.id]["quantity"] += 1;
 
-          //Calculating Subtotal of item
           var currentQuantity = details["current_orders"][toy.id]["quantity"];
 
           details["current_orders"][toy.id]["subtotal"] =
@@ -121,7 +116,6 @@ AFRAME.registerComponent("markerhandler", {
 
         details.total_bill += toy.price;
 
-        // Updating Db
         firebase
           .firestore()
           .collection("users")
@@ -139,7 +133,7 @@ AFRAME.registerComponent("markerhandler", {
       });
   },
   handleMarkerLost: function() {
-    // Changing button div visibility
+
     var buttonDiv = document.getElementById("button-div");
     buttonDiv.style.display = "none";
   }
